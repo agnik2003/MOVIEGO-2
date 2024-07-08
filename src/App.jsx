@@ -25,41 +25,38 @@ function App() {
 
   const fetchApiConfig = () => {
     fetchDataFromApi("/configuration").then((res) => {
-      console.log(res);
-
-      const url={
+      const url = {
         backdrop: res.images.secure_base_url + "original",
         poster: res.images.secure_base_url + "original",
         profile: res.images.secure_base_url + "original",
-      }
+      };
 
       dispatch(getApiConfiguration(url));
-
     });
   };
 
-  const genresCall = async () =>{
-    let promises = []
-    let endPoints = ["tv" , "movie"]
-    let allGenres = {}
+  const genresCall = async () => {
+    let promises = [];
+    let endPoints = ["tv", "movie"];
+    let allGenres = {};
 
-    endPoints.forEach((url) =>{
-      promises.push(fetchDataFromApi(`/genre/${url}/list`))
-    })
+    endPoints.forEach((url) => {
+      promises.push(fetchDataFromApi(`/genre/${url}/list`));
+    });
 
     const data = await Promise.all(promises);
 
-    console.log(data)
-    data.map(({genres})=>{
-      return genres.map((item) =>(allGenres[item.id] = item))
+    console.log(data);
+    data.map(({ genres }) => {
+      return genres.map((item) => (allGenres[item.id] = item));
     });
-    
+
     dispatch(getGenres(allGenres));
-  }
+  };
 
   return (
     <BrowserRouter>
-    <Header></Header>
+      <Header></Header>
 
       <Routes>
         <Route path="/" element={<Home />} />
